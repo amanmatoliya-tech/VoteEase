@@ -1,2 +1,2 @@
 # mini-voting-system
-A Flask-based mini voting system developed as my PBL project, includes admin panel, secure login, SQLite backend, and result system
+A secure and user-friendly voting application built with Flask, offering role-based access, admin controls, and automated result generation
