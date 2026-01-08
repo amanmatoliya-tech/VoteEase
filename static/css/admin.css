@@ -1,0 +1,19 @@
+/* Fix dropdown list colors */
+select.form-select {
+    background-color: rgba(255,255,255,0.2);
+    color: white;
+}
+
+/* Dropdown options */
+select.form-select option {
+    background-color: #0f172a; /* dark background */
+    color: white;              /* visible text */
+}
+
+/* Hover / selected option */
+select.form-select option:hover,
+select.form-select option:checked {
+    background-color: #2563eb;
+    color: white;
+}
+

@@ -1,209 +1,186 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Vote - {{ election.name }}</title>
+<meta charset="UTF-8">
+<title>Vote | {{ election.name }}</title>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
-    <style>
-        body {
-            background: linear-gradient(135deg, #4c6ef5, #15aabf);
-            min-height: 100vh;
-            padding-top: 40px;
-            color: white;
-            font-family: 'Poppins', sans-serif;
-        }
+<style>
+body {
+  background: #ede9fe;
+  font-family: 'Poppins', sans-serif;
+}
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(12px);
-            border-radius: 1rem;
-            padding: 2rem;
-            margin-top: 20px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-            animation: fadeIn 0.7s ease-out;
-        }
+.card {
+  border-radius: 18px;
+  transition: 0.25s;
+  cursor: pointer;
+}
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(25px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+.card:hover {
+  transform: translateY(-6px);
+}
 
-        .title {
-            font-size: 2rem;
-            font-weight: 700;
-            text-shadow: 0px 4px 20px rgba(0,0,0,0.3);
-        }
+.card.selected {
+  border: 3px solid #22c55e;
+  box-shadow: 0 0 18px rgba(34,197,94,0.6);
+}
 
-        .card {
-            transition: 0.3s ease;
-            border: 3px solid transparent !important;
-            border-radius: 1rem;
-            position: relative;
-            background: white;
-        }
+.card.blur {
+  opacity: 0.35;
+}
 
-        .card:hover {
-            transform: translateY(-6px) scale(1.02);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.25);
-        }
+.timer-bar {
+  height: 12px;
+  background: #ddd;
+  border-radius: 999px;
+  overflow: hidden;
+}
 
-        .card.selected {
-            border: 3px solid #22c55e !important;
-            transform: scale(1.1) translateY(-6px);
-            box-shadow: 0 0 30px rgba(34,197,94,0.6);
-            z-index: 10;
-        }
+.timer-fill {
+  height: 100%;
+  background: linear-gradient(90deg,#22c55e,#16a34a);
+  width: 100%;
+  transition: width 1s linear;
+}
 
-        .card.blur {
-            filter: blur(3px);
-            opacity: 0.35;
-            transform: scale(0.92);
-        }
+.btn-vote {
+  background: linear-gradient(90deg,#22c55e,#16a34a);
+  color: white;
+  border: none;
+  font-size: 1.2rem;
+  padding: 12px 40px;
+  border-radius: 12px;
+  font-weight: 600;
+}
 
-        .checkmark {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #22c55e;
-            color: white;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            font-size: 20px;
-            display: none;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .card.selected .checkmark {
-            display: flex;
-            animation: popIn 0.35s ease-out;
-        }
-
-        @keyframes popIn {
-            0% { transform: scale(0.3); opacity: 0; }
-            60% { transform: scale(1.25); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .btn-cast {
-            background: linear-gradient(90deg, #22c55e, #16a34a);
-            border: none;
-            padding: 12px 35px;
-            font-size: 1.2rem;
-            border-radius: 0.8rem;
-            color: white;
-            font-weight: 600;
-            transition: 0.3s ease;
-        }
-
-        .btn-cast:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-
-        .btn-logout {
-            background: #ef4444;
-            border: none;
-            padding: 10px 28px;
-            border-radius: 0.7rem;
-            color: white;
-        }
-
-        .btn-logout:hover {
-            background: #dc2626;
-        }
-    </style>
+.btn-vote:disabled {
+  background: gray;
+}
+</style>
 </head>
 
 <body>
+<div class="container py-4">
 
-<div class="container">
-    <div class="text-center mb-4">
-        <h2 class="title">{{ election.name }}</h2>
-    </div>
-
-    {% if has_voted %}
-    <div class="glass-card text-center">
-        <h4>🎉 Thank You for Voting!</h4>
-        <p>You have already cast your vote.</p>
-        <a href="{{ url_for('thanks') }}" class="btn btn-light mt-3">Continue</a>
-    </div>
-
-    {% else %}
-    <div class="glass-card">
-
-        <form method="POST">
-            <div class="row justify-content-center">
-
-                {% for c in candidates %}
-                <div class="col-md-4 mb-4 d-flex justify-content-center">
-
-                    <label style="width:100%; cursor:pointer;">
-                        <input type="radio" name="candidate" value="{{ c.id }}" style="display:none;">
-
-                        <div class="card p-3 text-center shadow-sm">
-
-                            <div class="checkmark">✔</div>
-
-                            <div class="candidate-img-wrapper mb-3"
-                                 style="width: 150px; height: 150px; overflow:hidden; border-radius: 50%; margin:auto;">
-
-                                {% set photofile = c.photo if c.photo and c.photo|length > 0 else 'default.png' %}
-
-                                <img src="{{ url_for('static', filename='photos/' ~ photofile) }}"
-                                     style="width:100%; height:100%; object-fit:cover;">
-                            </div>
-
-                            <h5 class="fw-bold text-dark">{{ c.name }}</h5>
-
-                        </div>
-                    </label>
-
-                </div>
-                {% endfor %}
-
-            </div>
-
-            <div class="text-center mt-2">
-                <button type="submit" class="btn-cast">Cast Vote</button>
-            </div>
-        </form>
-
-    </div>
-    {% endif %}
-
-    <div class="text-center mt-4 mb-5">
-        <a href="{{ url_for('logout') }}" class="btn-logout">Logout</a>
-    </div>
+<!-- TITLE -->
+<div class="text-center mb-3">
+  <h2 class="fw-bold">{{ election.name }}</h2>
 </div>
 
+<!-- TIMER -->
+{% if election.end_time %}
+<div class="card p-3 mb-4 text-center">
+  <div class="mb-1 fw-semibold">⏱ Time Remaining</div>
+  <div class="mb-2 text-danger fw-bold" id="timeText">--:--</div>
+  <div class="timer-bar">
+    <div id="timerFill" class="timer-fill"></div>
+  </div>
+</div>
+{% endif %}
+
+{% if has_voted %}
+<div class="card p-4 text-center">
+  <h4 class="text-success">✅ Vote Submitted</h4>
+  <p>You have already cast your vote.</p>
+</div>
+
+{% else %}
+
+<!-- CANDIDATES -->
+<form method="POST" id="voteForm">
+<div class="row justify-content-center">
+
+{% for c in candidates %}
+<div class="col-md-4 mb-4">
+<label style="width:100%;">
+<input type="radio" name="candidate" value="{{ c.id }}" hidden>
+
+<div class="card p-3 text-center">
+  <div style="width:130px;height:130px;margin:auto;border-radius:50%;overflow:hidden;">
+    <img src="{{ url_for('static', filename='photos/' ~ (c.photo or 'default.png')) }}"
+         style="width:100%;height:100%;object-fit:cover;">
+  </div>
+  <h5 class="mt-3 fw-bold">{{ c.name }}</h5>
+</div>
+
+</label>
+</div>
+{% endfor %}
+
+</div>
+
+<div class="text-center mt-3">
+  <button id="voteBtn" class="btn-vote" disabled>Cast Vote</button>
+</div>
+</form>
+
+{% endif %}
+
+<div class="text-center mt-4">
+  <a href="{{ url_for('logout') }}" class="btn btn-outline-danger">Logout</a>
+</div>
+
+</div>
+
+<!-- SELECTION SCRIPT -->
 <script>
-document.querySelectorAll("input[name='candidate']").forEach((radio) => {
-    radio.addEventListener("change", function() {
-        let cards = document.querySelectorAll(".card");
+const radios = document.querySelectorAll("input[name='candidate']");
+const voteBtn = document.getElementById("voteBtn");
 
-        cards.forEach(card => {
-            card.classList.remove("selected");
-            card.classList.remove("blur");
-        });
-
-        let selectedCard = this.closest("label").querySelector(".card");
-        selectedCard.classList.add("selected");
-
-        cards.forEach(card => {
-            if (card !== selectedCard) card.classList.add("blur");
-        });
+radios.forEach(radio => {
+  radio.addEventListener("change", () => {
+    document.querySelectorAll(".card").forEach(c=>{
+      c.classList.remove("selected","blur");
     });
+
+    const selected = radio.closest("label").querySelector(".card");
+    selected.classList.add("selected");
+
+    document.querySelectorAll(".card").forEach(c=>{
+      if(c!==selected) c.classList.add("blur");
+    });
+
+    voteBtn.disabled = false;
+  });
 });
 </script>
 
+<!-- TIMER SCRIPT -->
+{% if election.end_time %}
+<script>
+const endTime = new Date("{{ election.end_time }}").getTime();
+const startTime = new Date("{{ election.start_time }}").getTime();
+const total = endTime - startTime;
+
+const timeText = document.getElementById("timeText");
+const fill = document.getElementById("timerFill");
+
+setInterval(()=>{
+  const now = new Date().getTime();
+  const left = endTime - now;
+
+  if(left <= 0){
+    timeText.innerText = "00:00";
+    fill.style.width = "0%";
+    location.reload();
+    return;
+  }
+
+  const m = Math.floor(left/60000);
+  const s = Math.floor((left%60000)/1000);
+  timeText.innerText =
+    String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+
+  fill.style.width = (left/total*100) + "%";
+},1000);
+</script>
+{% endif %}
+
 </body>
 </html>
-
 
 
 

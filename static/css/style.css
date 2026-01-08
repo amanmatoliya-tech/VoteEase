@@ -1,0 +1,202 @@
+/* ================================
+   GLASS TABLE UI FOR DASHBOARD
+=================================*/
+
+.glass-table {
+    background: rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(10px) !important;
+    border-radius: 10px;
+    border-color: rgba(255,255,255,0.3) !important;
+}
+
+.glass-table td,
+.glass-table th {
+    color: rgb(104, 97, 208) !important;
+}
+
+td.college-id {
+    color: #312ae7 !important;
+    font-weight: 600;
+}
+
+
+/* ================================
+   CANDIDATE / WINNER IMAGE FIX
+=================================*/
+
+.candidate-img {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center top; /* ✅ FIX: no head cut */
+    border: 4px solid white;
+    box-shadow: 0px 4px 20px rgba(0,0,0,0.4);
+}
+
+/* Winner image (results page) */
+.winner-img {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center top; /* ✅ FIX */
+    border: 6px solid #a855f7;
+    box-shadow: 0 15px 40px rgba(168,85,247,0.5);
+}
+
+
+/* ================================
+   LOGIN PAGE GLOBAL RESET
+=================================*/
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif;
+    background: #f3f3fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+
+/* ================================
+   LOGIN PAGE WRAPPER
+=================================*/
+
+.wrapper {
+    width: 95%;
+    max-width: 980px;
+    height: 520px;
+    background: white;
+    border-radius: 28px;
+    display: flex;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+}
+
+
+/* ================================
+   LEFT LOGIN SECTION
+=================================*/
+
+.left {
+    width: 45%;
+    min-width: 50%;
+    padding: 50px 40px;
+    background: white;
+    z-index: 2;
+}
+
+.left h1 {
+    font-size: 46px;
+    margin: 0;
+    font-weight: 700;
+    color: #4B3F96;
+}
+
+.left h1:last-child {
+    color: #7b3cff;
+    margin-bottom: 10px;
+}
+
+.left h3 {
+    margin-top: 30px;
+    font-size: 18px;
+    color: #444;
+    font-weight: 600;
+}
+
+
+/* INPUT FIELDS */
+
+.input-field {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #d1cfe1;
+    padding: 12px 5px;
+    outline: none;
+    margin-bottom: 28px;
+    font-size: 15px;
+    transition: 0.2s ease;
+}
+
+.input-field:focus {
+    border-bottom: 1px solid #7b3cff;
+}
+
+
+/* LOGIN BUTTON */
+
+.login-btn {
+    width: 150px;
+    height: 45px;
+    border: none;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #C95BFF, #8233FF);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 5px 15px rgba(131,51,255,0.3);
+    transition: 0.2s ease;
+}
+
+.login-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(131,51,255,0.4);
+}
+
+
+/* LINK STYLING */
+
+a {
+    color: #7b3cff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+
+/* ================================
+   RIGHT ILLUSTRATION SECTION
+=================================*/
+
+.right {
+    width: 55%;
+    min-width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: visible;
+}
+
+
+/* CURVED WHITE OVERLAY */
+
+.curve {
+    position: absolute;
+    left: -60px;
+    top: 0;
+    width: 200px;
+    height: 100%;
+    background: white;
+    border-radius: 0 0 200px 0;
+    z-index: 10;
+}
+
+
+/* ILLUSTRATION IMAGE */
+
+.right img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    z-index: 5;
+    user-select: none;
+}

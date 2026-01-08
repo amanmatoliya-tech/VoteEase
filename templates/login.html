@@ -1,167 +1,220 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Student Login - Mini Voting</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login | Mini Voting System</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <style>
-        body {
-            background: linear-gradient(135deg, #4c6ef5, #15aabf);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            color: white;
-        }
+<style>
+body {
+    background: linear-gradient(180deg, #ede9fe, #e0d4fc);
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(12px);
-            border-radius: 1rem;
-            padding: 2.2rem;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-            animation: fadeIn 0.7s ease;
-            color: white;
-        }
+/* MAIN CARD */
+.main-container {
+    background: linear-gradient(to bottom, #c4b5fd 0%, #ffffff 70%);
+    width: 100%;
+    max-width: 1050px;
+    border-radius: 22px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.12);
+    padding: 40px 60px 60px;
+}
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+/* NAV */
+.navbar-custom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 60px;
+}
 
-        h2 {
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 1.8rem;
-            font-size: 1.9rem;
-        }
+.logo {
+    font-weight: 700;
+    font-size: 18px;
+    color: #4f46e5;
+}
 
-        .form-control {
-            background: rgba(255,255,255,0.25);
-            border: none;
-            padding: 0.75rem 1rem;
-            border-radius: 0.7rem;
-            color: white;
-        }
+.nav-links a {
+    margin-left: 25px;
+    text-decoration: none;
+    color: #4b5563;
+    font-weight: 500;
+    font-size: 14px;
+}
 
-        .form-control::placeholder {
-            color: #e0e0e0;
-        }
+.nav-links a:hover {
+    color: #4f46e5;
+}
 
-        .form-control:focus {
-            background: rgba(255,255,255,0.35);
-            box-shadow: none;
-            border: 1px solid #fff;
-        }
+/* CONTENT */
+.content {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    align-items: center;
+    gap: 40px;
+}
 
-        label {
-            font-weight: 600;
-            margin-bottom: 0.4rem;
-        }
+/* LEFT */
+.hero-text h1 {
+    font-size: 42px;
+    font-weight: 700;
+    color: #1f2937;
+}
 
-        .btn-custom {
-            background: #22c55e;
-            border: none;
-            border-radius: 0.7rem;
-            padding: 0.8rem;
-            width: 100%;
-            font-size: 1.1rem;
-            color: white;
-            margin-top: 10px;
-            transition: 0.3s ease;
-        }
+.hero-text p {
+    color: #4b5563;
+    margin: 15px 0 35px;
+}
 
-        .btn-custom:hover {
-            background: #16a34a;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.25);
-        }
+.primary-btn {
+    background: linear-gradient(to right, #6366f1, #a855f7);
+    color: white;
+    padding: 12px 38px;
+    border-radius: 30px;
+    border: none;
+    font-weight: 600;
+    font-size: 14px;
+}
 
-        .flash {
-            padding: 12px;
-            border-radius: 0.7rem;
-            font-weight: 600;
-            animation: fadeIn 0.7s ease forwards;
-        }
+/* FORM */
+.form-card {
+    background: white;
+    padding: 35px;
+    border-radius: 18px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+}
 
-        .flash.success {
-            background-color: rgba(180, 255, 180, 0.3);
-            border-left: 4px solid #22c55e;
-            color: #d9ffd9;
-        }
+.input-group-custom {
+    position: relative;
+    margin-bottom: 20px;
+}
 
-        .flash.error {
-            background-color: rgba(255, 150, 150, 0.3);
-            border-left: 4px solid #ff4d4d;
-            color: #ffe2e2;
-        }
+.input-group-custom i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a5b4fc;
+}
 
-        a {
-            color: #d9ecff;
-            font-weight: 600;
-            text-decoration: underline;
-        }
+.input-group-custom input {
+    width: 100%;
+    padding: 14px 15px 14px 45px;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    outline: none;
+}
 
-        a:hover {
-            color: white;
-        }
+.input-group-custom input:focus {
+    border-color: #6366f1;
+}
 
-        @media(max-width: 480px) {
-            .glass-card { padding: 1.7rem; }
-            h2 { font-size: 1.6rem; }
-        }
-    </style>
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+    font-size: 13px;
+}
+
+.form-actions a {
+    text-decoration: none;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.form-actions a:hover {
+    color: #4f46e5;
+}
+
+/* MOBILE */
+@media(max-width: 900px) {
+    .content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+}
+</style>
 </head>
 
 <body>
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-5">
-            <div class="glass-card">
+<div class="main-container">
 
-                <h2>🎓 Student Login</h2>
+    <!-- NAVBAR -->
+    <div class="navbar-custom">
+        <div class="logo">Mini Voting</div>
 
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        {% for cat, msg in messages %}
-                            <div class="flash {{ cat }}">{{ msg }}</div>
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
-
-                <form method="POST">
-                    <div class="mb-3">
-                        <label for="college_id">College ID</label>
-                        <input type="text" name="college_id" id="college_id" class="form-control" placeholder="Enter your College ID" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="password">Password</label>
-                        <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required>
-                    </div>
-
-                    <button type="submit" class="btn-custom">Login</button>
-
-                    <div class="text-center mt-3">
-                        <small>New student? <a href="{{ url_for('register') }}">Register here</a></small>
-                    </div>
-
-                    <div class="text-center mt-4">
-                        <small>Admin? <a href="{{ url_for('admin') }}">Login here</a></small>
-                    </div>
-                </form>
-
-            </div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/results">Results</a>
+            <a href="{{ url_for('admin') }}">Admin</a>
         </div>
     </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+        <!-- LEFT -->
+        <div class="hero-text">
+            <h1>Login to Your Account</h1>
+            <p>Use your college credentials to participate in the election securely.</p>
+
+            <button class="primary-btn" type="submit" form="loginForm">
+                Login
+            </button>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="form-card">
+
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                {% for m in messages %}
+                <div class="alert alert-danger small">
+                    <i class="fas fa-exclamation-circle"></i> {{ m }}
+                </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('login') }}" id="loginForm">
+
+                <div class="input-group-custom">
+                    <i class="fas fa-id-card"></i>
+                    <input type="text" name="college_id" placeholder="College ID" required>
+                </div>
+
+                <div class="input-group-custom">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" name="password" placeholder="Password" required>
+                </div>
+
+                <div class="form-actions">
+                    <a href="/register">
+                        <i class="fas fa-user-plus"></i> Register
+                    </a>
+
+                    <a href="{{ url_for('admin') }}">
+                        <i class="fas fa-user-shield"></i> Admin Login
+                    </a>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+
 </div>
 
 </body>
 </html>
-
 

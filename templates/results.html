@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Election Result | Mini Voting System</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+    background: linear-gradient(135deg, #e9d5ff, #fdf4ff);
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+}
+
+/* Glass Card */
+.glass-card {
+    background: rgba(255,255,255,0.94);
+    border-radius: 22px;
+    padding: 32px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+}
+
+/* Winner animation */
+@keyframes popIn {
+    0% { transform: scale(0.85); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.winner-card {
+    animation: popIn 0.9s ease-out forwards;
+}
+
+/* Winner image */
+.winner-img {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 6px solid #a855f7;
+    box-shadow: 0 15px 40px rgba(168,85,247,0.5);
+}
+
+/* Trophy bounce */
+@keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+}
+
+.trophy {
+    font-size: 48px;
+    animation: bounce 1.4s infinite;
+}
+
+/* Timer */
+.timer {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #dc2626;
+}
+
+/* Button */
+.btn-purple {
+    background: linear-gradient(to right, #6366f1, #a855f7);
+    color: #fff;
+    border: none;
+    font-weight: 600;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height:100vh;">
+
+<div class="glass-card text-center col-md-6">
+
+    <h2 class="mb-4">Election Result</h2>
+
+    <!-- NO ELECTION -->
+    {% if status == "no_election" %}
+        <div class="alert alert-info">
+            🗳️ No election has been conducted yet.
+        </div>
+
+    <!-- ELECTION RUNNING -->
+    {% elif status == "running" %}
+        <div class="alert alert-warning">
+            ⏳ Election is still running
+        </div>
+
+        <p class="fw-semibold mt-3">{{ election.name }}</p>
+
+        <div class="timer mt-2">
+            ⏱ Time Remaining: <span id="timer">--:--</span>
+        </div>
+
+    <!-- ELECTION ENDED -->
+    {% elif status == "ended" and winner %}
+        <div class="winner-card">
+
+            <div class="trophy mb-3">🏆</div>
+
+            <h4 class="mb-1">{{ election.name }}</h4>
+            <p class="text-muted mb-4">Winner Announcement</p>
+
+            <img src="{{ url_for('static', filename='photos/' + winner.photo) }}"
+                 class="winner-img mb-3"
+                 alt="Winner Photo">
+
+            <h3 class="fw-bold mt-2">{{ winner.name }}</h3>
+
+            <p class="text-success fw-semibold">
+                Total Votes: {{ winner.votes }}
+            </p>
+
+        </div>
+    {% endif %}
+
+    <div class="mt-4">
+        <a href="/login" class="btn btn-purple px-4 py-2">Back to Login</a>
+    </div>
+
+    <div class="text-muted mt-4">
+        <small>Mini Voting System · Official Result</small>
+    </div>
+
+</div>
+</div>
+
+<!-- TIMER SCRIPT (RUNNING ELECTION) -->
+{% if status == "running" %}
+<script>
+const endTime = new Date("{{ election.end_time }}").getTime();
+
+setInterval(() => {
+    const now = new Date().getTime();
+    const diff = endTime - now;
+
+    if (diff <= 0) {
+        document.getElementById("timer").innerText = "00:00";
+        location.reload();
+        return;
+    }
+
+    const m = Math.floor(diff / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    document.getElementById("timer").innerText =
+        String(m).padStart(2,"0") + ":" + String(s).padStart(2,"0");
+}, 1000);
+</script>
+{% endif %}
+
+</body>
+</html>
+
+

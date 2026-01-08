@@ -1,248 +1,267 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Admin Dashboard - Mini Voting</title>
+<meta charset="UTF-8">
+<title>Admin Dashboard</title>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <style>
-        body {
-            background: linear-gradient(135deg, #4c6ef5, #15aabf);
-            min-height: 100vh;
-            font-family: 'Poppins', sans-serif;
-            color: white;
-            padding-bottom: 40px;
-        }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(12px);
-            border-radius: 1rem;
-            padding: 1.8rem;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-            animation: fadeIn 0.7s ease;
-            color: white;
-        }
-        @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(20px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
-        .form-control, .form-select {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border: none;
-            border-radius: .6rem;
-        }
-        .form-control:focus {
-            background: rgba(255,255,255,0.3);
-            box-shadow: none;
-        }
-        .btn-custom {
-            background: #22c55e;
-            border: none;
-            padding: 0.7rem 1rem;
-            color: white;
-            font-weight: 600;
-            border-radius: 0.7rem;
-        }
-        .btn-custom:hover {
-            background: #16a34a;
-        }
-        .glass-table {
-            background: rgba(255,255,255,0.1);
-            color: white;
-        }
-    </style>
+<style>
+body { background:#ede9fe; }
+.card { border-radius:18px; }
+.stat { font-size:32px; font-weight:700; }
+.timer { font-size:22px; color:#dc2626; font-weight:700; }
+
+/* SCROLLABLE STUDENT LIST */
+.scroll-box {
+  max-height: 320px;
+  overflow-y: auto;
+}
+.scroll-box::-webkit-scrollbar {
+  width: 6px;
+}
+.scroll-box::-webkit-scrollbar-thumb {
+  background: #a78bfa;
+  border-radius: 10px;
+}
+
+.candidate-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+</style>
 </head>
 
 <body>
+<div class="container py-4">
 
-<!-- 🔥 Flash messages -->
-<div class="container mt-3">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for cat, msg in messages %}
-                <div class="alert alert-{{ cat }}">{{ msg }}</div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-</div>
-
-
-<!-- 🔐 LOGIN PAGE -->
 {% if not logged_in %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-4">
-            <div class="glass-card text-center">
-                <h2>Admin Login</h2>
-
-                <form method="POST">
-                    <input type="password" name="password" 
-                           class="form-control mt-3" 
-                           placeholder="Enter admin password" required>
-
-                    <button type="submit" name="admin_login" 
-                            class="btn-custom w-100 mt-3">Login</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+<form method="POST" class="card p-4 col-md-4 mx-auto">
+  <h3 class="text-center">Admin Login</h3>
+  <input type="password" name="password" class="form-control my-3" placeholder="Password" required>
+  <button name="admin_login" class="btn btn-dark w-100">Login</button>
+</form>
 
 {% else %}
 
-<!-- 🧑‍💼 ADMIN PANEL -->
-<div class="container mt-4">
+<!-- HEADER -->
+<div class="d-flex justify-content-between mb-3">
+  <h2>Admin Dashboard</h2>
+  <a href="/logout" class="btn btn-outline-dark">Logout</a>
+</div>
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Admin Dashboard</h2>
-        <a href="{{ url_for('logout') }}" class="btn btn-light">Logout</a>
+<!-- STATUS -->
+<div class="card p-2 text-center mb-2">
+{% if election %}
+  <span class="badge bg-success">🟢 Election Running</span>
+{% else %}
+  <span class="badge bg-secondary">⚪ No Election Running</span>
+{% endif %}
+</div>
+
+<!-- TIMER -->
+<div class="card p-3 text-center mb-3">
+  <div>⏱ Time Remaining</div>
+  {% if election %}
+    <div id="timer" class="timer">Loading…</div>
+  {% else %}
+    <div class="text-muted">Create an election to start timer</div>
+  {% endif %}
+</div>
+
+<!-- END ELECTION -->
+<form method="POST" class="text-center mb-4">
+  <input type="hidden" name="end_election">
+  <button class="btn btn-danger" {% if not election %}disabled{% endif %}>
+    End Election & Show Result
+  </button>
+</form>
+
+<!-- STATS -->
+<div class="row mb-4">
+  <div class="col-md-4">
+    <div class="card p-3 text-center">
+      <div>Total Students</div>
+      <div class="stat text-primary">{{ total_students }}</div>
     </div>
-
-    <div class="row g-4">
-
-        <!-- CREATE ELECTION -->
-        <div class="col-md-6">
-            <div class="glass-card">
-                <h4>Create New Election</h4>
-                <form method="POST">
-                    <input type="text" name="election_name"
-                           class="form-control mb-2"
-                           placeholder="Election name" required>
-
-                    <button type="submit" name="create_election" 
-                            class="btn-custom w-100">
-                        Create Election
-                    </button>
-                </form>
-            </div>
-        </div>
-
-        <!-- ADD CANDIDATE -->
-        <div class="col-md-6">
-            <div class="glass-card">
-                <h4>Add Candidate</h4>
-
-                <form method="POST">
-
-                    <select name="election_id" class="form-select mb-3" required>
-                        <option value="" disabled selected>Select Election</option>
-                        {% for e in elections %}
-                        <option value="{{ e.id }}">{{ e.name }}</option>
-                        {% endfor %}
-                    </select>
-
-                    <input type="text" name="candidate_name" 
-                           class="form-control mb-2" 
-                           placeholder="Candidate Name" required>
-
-                    <button type="submit" name="add_candidate" 
-                            class="btn-custom w-100">
-                        Add Candidate
-                    </button>
-                </form>
-            </div>
-        </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card p-3 text-center">
+      <div>Votes Cast</div>
+      <div class="stat text-success">{{ votes_cast }}</div>
     </div>
-
-
-    <!-- 📊 RESULTS -->
-    <div class="mt-4">
-        <h4>Election Results</h4>
-
-        {% for ename, res in results.items() %}
-        <div class="glass-card mt-3">
-            <h5>{{ ename }}</h5>
-            <ul class="list-group">
-                {% for c in res %}
-                <li class="list-group-item d-flex justify-content-between align-items-center glass-table">
-                    {{ c.name }}
-                    <span class="badge bg-light text-dark">{{ c.votes }}</span>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endfor %}
+  </div>
+  <div class="col-md-4">
+    <div class="card p-3 text-center">
+      <div>Votes Remaining</div>
+      <div class="stat text-danger">{{ votes_remaining }}</div>
     </div>
+  </div>
+</div>
 
+<!-- CURRENT LEADER -->
+{% if leader %}
+<div class="card p-3 mb-4 text-center border-success">
+  <h5>🏆 Current Leader</h5>
+  <img src="{{ url_for('static', filename='photos/' ~ leader.photo) }}"
+       class="candidate-img mb-2">
+  <h4 class="fw-bold text-success">{{ leader.name }}</h4>
+  <div class="text-muted">Votes: {{ leader.votes }}</div>
+</div>
+{% endif %}
 
-    <!-- 🗳 MANAGE CANDIDATES -->
-    <div class="mt-5">
-        <div class="glass-card">
-            <h4>Manage Candidates</h4>
+<!-- CREATE ELECTION + ADD PARTICIPANT -->
+<div class="row mb-4">
 
-            <table class="table table-bordered glass-table mt-3">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Election</th>
-                        <th>Photo</th>
-                        <th>Votes</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for ename, res in results.items() %}
-                    {% for c in res %}
-                    <tr>
-                        <td>{{ c.name }}</td>
-                        <td>{{ ename }}</td>
-
-                        <td>
-                            <img src="{{ url_for('static', filename=c.photo) }}"
-                                 style="width:45px;height:45px;border-radius:50%;object-fit:cover;">
-                        </td>
-
-                        <td>{{ c.votes }}</td>
-
-                        <td>
-                            <form action="{{ url_for('delete_candidate', cid=c.id) }}"
-                                  method="POST"
-                                  onsubmit="return confirm('Delete {{ c.name }}?');">
-                                <button class="btn btn-danger btn-sm">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+  <div class="col-md-6">
+    <div class="card p-4 h-100">
+      <h4>Create Election</h4>
+      <form method="POST">
+        <input type="hidden" name="create_election">
+        <input name="election_name" class="form-control mb-2" placeholder="Election Name" required>
+        <input name="duration" type="number" class="form-control mb-2" placeholder="Duration (minutes)" required>
+        <button class="btn btn-success w-100">Create Election</button>
+      </form>
     </div>
+  </div>
 
+  <div class="col-md-6">
+    <div class="card p-4 h-100">
+      <h4>Add Participant</h4>
+      <form method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="add_candidate">
 
-    <!-- 🧾 STUDENTS -->
-    <div class="mt-5">
-        <div class="glass-card">
-            <h4>Students</h4>
+        <input name="candidate_name"
+               class="form-control mb-2"
+               placeholder="Candidate Name"
+               {% if not election %}disabled{% endif %}
+               required>
 
-            <table class="table table-bordered glass-table mt-3">
-                <thead>
-                    <tr>
-                        <th>College ID</th>
-                        <th>Has Voted</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for s in students %}
-                    <tr>
-                        <td>{{ s.college_id }}</td>
-                        <td>{{ "YES" if s.has_voted else "NO" }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+        <input type="file"
+               name="photo"
+               class="form-control mb-2"
+               {% if not election %}disabled{% endif %}
+               required>
+
+        <button class="btn btn-primary w-100" {% if not election %}disabled{% endif %}>
+          Add Candidate
+        </button>
+
+        {% if not election %}
+          <small class="text-muted">Create an election to add participants</small>
+        {% endif %}
+      </form>
     </div>
+  </div>
 
 </div>
 
-{% endif %}
+<!-- MANAGE CANDIDATES -->
+<div class="card p-4 mb-4">
+<h4>Manage Candidates</h4>
+<table class="table align-middle">
+<tr>
+  <th>Name</th>
+  <th>Photo</th>
+  <th>Votes</th>
+  <th>Action</th>
+</tr>
 
+{% if candidates %}
+  {% for c in candidates %}
+  <tr>
+    <td>{{ c.name }}</td>
+    <td>
+      <img src="{{ url_for('static', filename='photos/' ~ c.photo) }}"
+           class="candidate-img">
+    </td>
+    <td><span class="badge bg-primary">{{ c.votes }}</span></td>
+    <td>
+      <form method="POST" action="{{ url_for('delete_candidate', cid=c.id) }}">
+        <button class="btn btn-sm btn-danger">Delete</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+{% else %}
+  <tr>
+    <td colspan="4" class="text-center text-muted">No candidates added</td>
+  </tr>
+{% endif %}
+</table>
+</div>
+
+<!-- REGISTERED STUDENTS -->
+<div class="card p-4">
+<h4>Registered Students</h4>
+<div class="scroll-box">
+<table class="table mb-0">
+<tr>
+  <th>College ID</th>
+  <th>Status</th>
+  <th>Action</th>
+</tr>
+
+{% for s in students %}
+<tr>
+<td>{{ s.college_id }}</td>
+
+<td>
+{% if election %}
+  {% if s.has_voted %}
+    <span class="badge bg-success">Voted</span>
+  {% else %}
+    <span class="badge bg-secondary">Not Voted</span>
+  {% endif %}
+{% else %}
+  <span class="badge bg-light text-dark">No Election</span>
+{% endif %}
+</td>
+
+<td>
+<form method="POST"
+      action="{{ url_for('delete_student', college_id=s.college_id) }}"
+      onsubmit="return confirm('Delete this student permanently?');">
+  <button class="btn btn-sm btn-danger">
+    Delete
+  </button>
+</form>
+</td>
+</tr>
+{% endfor %}
+</table>
+</div>
+</div>
+
+{% endif %}
+</div>
+
+{% if election %}
+<script>
+const timerEl = document.getElementById("timer");
+if (timerEl) {
+  const endTime = new Date("{{ election.end_time }}").getTime();
+  setInterval(() => {
+    const diff = endTime - new Date().getTime();
+    timerEl.innerText =
+      diff <= 0
+        ? "Election Ended"
+        : Math.floor(diff / 60000) + "m " +
+          Math.floor((diff % 60000) / 1000) + "s remaining";
+  }, 1000);
+}
+</script>
+{% endif %}
 </body>
 </html>
+
+
+
+
+
+       
 
 
 

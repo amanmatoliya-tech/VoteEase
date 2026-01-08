@@ -1,0 +1,206 @@
+/* ===============================
+   GLOBAL RESET
+================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* ===============================
+   FULL BACKGROUND (VOTING THEME)
+================================ */
+.page-wrapper {
+    height: 100vh;
+    position: relative;
+    background:
+        linear-gradient(
+            rgba(10, 20, 40, 0.88),
+            rgba(10, 20, 40, 0.88)
+        ),
+        linear-gradient(
+            135deg,
+            #0f2027,
+            #203a43,
+            #2c5364
+        );
+}
+
+/* Soft depth lights */
+.page-wrapper::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 20% 30%, rgba(255,255,255,0.05), transparent 45%),
+        radial-gradient(circle at 80% 70%, rgba(255,255,255,0.05), transparent 45%);
+    pointer-events: none;
+}
+
+/* ===============================
+   LEFT TEXT (AUTHORITY MESSAGE)
+================================ */
+.hero-text {
+    position: absolute;
+    left: 8%;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    max-width: 460px;
+}
+
+.hero-text h1 {
+    font-size: 52px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    letter-spacing: 0.5px;
+}
+
+.hero-text p {
+    font-size: 17px;
+    line-height: 1.7;
+    opacity: 0.9;
+}
+
+/* ===============================
+   GLASS LOGIN CARD
+================================ */
+.login-glass {
+    position: absolute;
+    right: 8%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 380px;
+    padding: 2.6rem;
+
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.25);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.45);
+
+    color: white;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.login-glass:hover {
+    transform: translateY(-52%);
+    box-shadow: 0 40px 80px rgba(0,0,0,0.55);
+}
+
+.login-glass h3 {
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.login-glass small {
+    opacity: 0.85;
+}
+
+/* ===============================
+   FORM CONTROLS
+================================ */
+.form-control {
+    background: rgba(255,255,255,0.95);
+    border: none;
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 14px;
+}
+
+.form-control:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(30,144,255,0.35);
+}
+
+.input-group-text {
+    background: rgba(255,255,255,0.9);
+    border: none;
+}
+
+/* Password toggle */
+.toggle-password {
+    cursor: pointer;
+    color: #1f2937;
+}
+
+/* ===============================
+   PRIMARY ACTION BUTTON
+================================ */
+.btn-primary {
+    width: 100%;
+    background: linear-gradient(135deg, #1e90ff, #187bcd);
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    padding: 12px;
+    letter-spacing: 0.3px;
+    box-shadow: 0 10px 25px rgba(30,144,255,0.45);
+    transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 40px rgba(30,144,255,0.6);
+}
+
+/* ===============================
+   DIVIDER
+================================ */
+.form-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.25);
+    margin: 22px 0;
+}
+
+/* ===============================
+   LINKS
+================================ */
+.login-links {
+    font-size: 13px;
+    text-align: center;
+}
+
+.login-links a {
+    color: #8ab4ff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.login-links a:hover {
+    text-decoration: underline;
+}
+
+/* ===============================
+   FLASH MESSAGES
+================================ */
+.alert {
+    font-size: 14px;
+    border-radius: 10px;
+}
+
+/* ===============================
+   RESPONSIVE (MOBILE SAFE)
+================================ */
+@media (max-width: 900px) {
+    .hero-text {
+        display: none;
+    }
+
+    .login-glass {
+        right: 50%;
+        transform: translate(50%, -50%);
+        width: 90%;
+    }
+}
+
+
+
