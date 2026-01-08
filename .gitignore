@@ -1,18 +1,22 @@
-# Ignore Python cache
+# Python cache
 __pycache__/
 *.pyc
 
-# Ignore virtual environments
+# Virtual environments
 venv/
 env/
 
-# Ignore SQLite database files
+# Databases (BOTH folders)
 database/
+sqlite3/
 *.db
 
-# Ignore VS Code settings
+# IDE
 .vscode/
 
-# Ignore environment variables
+# Environment variables
 .env
+
+# Uploaded photos
 static/photos/
+
