@@ -1,2 +1,10 @@
-# mini-voting-system
-A secure and user-friendly voting application built with Flask, offering role-based access, admin controls, and automated result generation
+# VoteEase – Mini Voting System
+
+A Flask-based mini voting system developed as a PBL project.
+
+## Features
+- Secure student authentication
+- Admin dashboard for election management
+- Candidate and voter management
+- Real-time voting with SQLite backend
+- Automatic result generation
